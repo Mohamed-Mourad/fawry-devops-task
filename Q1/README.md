@@ -65,7 +65,6 @@ The script performs the following checks and exit codes:
 
 Descriptive error messages are printed to `stderr`.
 
-## Reflective Section
 
 ## Reflective Section
 
