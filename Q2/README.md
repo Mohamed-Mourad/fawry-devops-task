@@ -93,7 +93,139 @@ Assuming the correct IP address for `internal.example.com` is **192.168.1.100**,
 
 ---
 
+### Phase 4: Confirming and Fixing Potential Causes
+
+#### 1. Issues Directly on the DNS Server (192.168.112.2)
+
+**Possibility: Missing Record**
+
+- **How to Check:**
+  - SSH into the DNS server (e.g., `ssh admin@192.168.112.2`).
+  - Inspect the DNS zone file (`/etc/bind/zones/db.example.com` for BIND, `/etc/dnsmasq.d/internal-hosts.conf` for dnsmasq, etc.).
+  - Use `grep internal.example.com /path/to/zone/file` or open the file with `less`/`nano`.
+  - Run `dig internal.example.com @localhost` from the server.
+
+- **How to Fix:**
+  - Add the missing A record:
+    ```
+    internal    IN    A    192.168.1.100
+    ```
+  - If using BIND, increment the serial number.
+  - Reload DNS service:
+    - BIND: `sudo systemctl reload bind9`
+    - dnsmasq: `sudo systemctl restart dnsmasq`
+  - Verify with `dig internal.example.com` from the client.
+
+**Possibility: Typo in Record**
+
+- **How to Check:**
+  - SSH into the server and inspect the zone file.
+  - Look for typos like `internal.examplle.com` or wrong IP addresses.
+
+- **How to Fix:**
+  - Correct the typo.
+  - Increment the serial number if using BIND.
+  - Reload/restart the DNS service.
+  - Verify with `dig` from the client.
+
+**Possibility: Wrong Zone or View**
+
+- **How to Check:**
+  - Review DNS configs (`/etc/bind/named.conf.local`, `/etc/dnsmasq.conf`, etc.).
+  - Ensure the record is in the correct zone.
+
+- **How to Fix:**
+  - Move the record to the correct zone if needed.
+  - Adjust zone/view settings.
+  - Reload DNS service.
+  - Re-test with `dig`.
+
+**Possibility: DNS Service Problems**
+
+- **How to Check:**
+  - Run `sudo systemctl status bind9` (or dnsmasq).
+  - Check logs: `sudo journalctl -u bind9 | grep -i error`.
+  - Validate zone files with `named-checkzone` (for BIND).
+
+- **How to Fix:**
+  - Fix any syntax errors.
+  - Restart DNS service.
+  - Re-test.
+
+**Possibility: Replication Issues (if secondary server)**
+
+- **How to Check:**
+  - Review logs for replication errors.
+  - Compare SOA serial numbers:
+    ```
+    dig SOA internal.example.com @localhost +short
+    dig SOA internal.example.com @192.168.1.9 +short
+    ```
+
+- **How to Fix:**
+  - Ensure zone transfers are allowed.
+  - Fix any firewall/network issues.
+  - Correct configs.
+  - Restart service and verify replication.
+
+#### 2. Client-Side Issues (Our Machine)
+
+**Possibility: Wrong DNS Server Config**
+
+- **How to Check:**
+  - Use `resolvectl status`.
+  - Inspect `/etc/netplan/*.yaml` or `/etc/NetworkManager/system-connections/`.
+
+- **How to Fix:**
+  - Correct DNS server IPs.
+  - Apply changes (`sudo netplan apply` or `sudo nmcli con up`).
+
+**Possibility: Stale Local DNS Cache**
+
+- **How to Check:**
+  - Difficult; flush cache to be sure.
+
+- **How to Fix:**
+  - `sudo resolvectl flush-caches`
+
+**Possibility: Bad `/etc/hosts` Entry**
+
+- **How to Check:**
+  - `cat /etc/hosts | grep internal.example.com`
+
+- **How to Fix:**
+  - Edit `/etc/hosts`, correct or comment out bad entries.
+
+#### 3. Network Path Issues (Affecting DNS)
+
+**Possibility: Firewall Blocking DNS**
+
+- **How to Check:**
+  - Check UFW: `sudo ufw status`
+  - Check iptables: `sudo iptables -L OUTPUT -n -v | grep 53`
+  - Trace route to port 53: `sudo traceroute -T -p 53 192.168.112.2`
+
+- **How to Fix:**
+  - Allow DNS traffic locally.
+  - Request firewall changes from the network team if needed.
+
+#### 4. Configuration / Change Management Issues
+
+**Possibility: Recent Changes**
+
+- **How to Check:**
+  - Review change history (Ansible, Terraform, etc.).
+  - Ask team about recent changes.
+
+- **How to Fix:**
+  - Revert bad changes.
+  - Correct missing records.
+
+---
+
 ## Summary
 
 Primary suspicion falls on the internal DNS server configuration (192.168.112.2). The record for `internal.example.com` appears missing, incorrect, or otherwise unavailable.
+
+Final Note: This troubleshooting guide is based on my review of the environment and research into best practices for BIND, dnsmasq, and Linux DNS setups. If needed, I'm happy to walk through any of these steps in detail.
 
