@@ -48,7 +48,7 @@ Assuming the correct IP address for `internal.example.com` is **192.168.1.100**,
 3. **Attempt HTTP/HTTPS requests using `curl` with `--resolve`**
 
    - **HTTP Test:**
-     - `curl -v --resolve internal.example.com:80:192.168.1.100 http://internal.example.com`
+     - `curl -v --resolve internal.example.com:80:192.168.112.2 http://internal.example.com`
      - Result: Connection refused.
 
    - **HTTPS Test:**
