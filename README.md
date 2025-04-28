@@ -3,7 +3,7 @@ Implementation of custom grep script
 
 ## Installation
 
-Before using the script, make sure is is executable. From the directory containing the script, run:
+Before using the script, make sure it is executable. From the directory containing the script, run:
 
 ```bash
 chmod +x mygrep.sh
