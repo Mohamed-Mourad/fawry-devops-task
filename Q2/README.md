@@ -238,6 +238,24 @@ sudo vim /etc/hosts
 
 ### Bonus Task 2: Show how to persist DNS server settings using systemd-resolved
 
+#### 1. Edit the configuration file:
+```
+sudo vim /etc/systemd/resolved.conf
+```
+#### 2. Set DNS Servers:
+   - Find the [Resolve] section.
+   - Uncomment and edit the DNS= line to include the desired servers 
+   ```
+   [Resolve]
+   DNS=192.168.112.2 8.8.8.8
+   #FallbackDNS=1.1.1.1 8.8.4.4 9.9.9.9
+   #...
+   ```
+#### 3. Restart systemd-resolved:
+```
+sudo systemctl restart systemd-resolved
+```
+
 ---
 
 ## Summary
