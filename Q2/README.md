@@ -223,6 +223,23 @@ Assuming the correct IP address for `internal.example.com` is **192.168.1.100**,
 
 ---
 
+## Bonus Tasks
+
+### Bonus Task 1: Configure a local /etc/hosts entry to bypass DNS for testing
+
+#### 1. Edit the hosts file with the command:
+```
+sudo vim /etc/hosts
+```
+#### 2. Add this entry (using a hypothetical IP) on a new line:
+```
+192.168.1.100   internal.example.com
+```
+
+### Bonus Task 2: Show how to persist DNS server settings using systemd-resolved
+
+---
+
 ## Summary
 
 Primary suspicion falls on the internal DNS server configuration (192.168.112.2). The record for `internal.example.com` appears missing, incorrect, or otherwise unavailable.
