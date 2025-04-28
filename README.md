@@ -45,10 +45,10 @@ Searches the given `<filename>` for occurrences of `<pattern>` (case-insensitive
 **Examples:**
 ```bash
 # Basic search
-t./mygrep.sh hello testfile.txt
+./mygrep.sh hello testfile.txt
 
 # Search with line numbers
-t./mygrep.sh -n error /var/log/syslog
+./mygrep.sh -n error /var/log/syslog
 
 # Inverted match (show lines without the pattern)
 ./mygrep.sh -v TODO TODOs.txt
@@ -78,10 +78,10 @@ This is useful when you know the pattern but want to choose from multiple files 
 **Examples:**
 ```bash
 # Prompt for filename
-t./mygrepstdin.sh success
+./mygrepstdin.sh success
 
 # Provide filename inline
-t./mygrepstdin.sh -n success report.log
+./mygrepstdin.sh -n success report.log
 ```
 
 ## Handling Errors
