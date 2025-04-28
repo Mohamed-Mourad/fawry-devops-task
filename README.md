@@ -3,22 +3,21 @@ Implementation of custom grep script
 
 ## Installation
 
-Before using the scripts, make sure they are executable. From the directory containing the scripts, run:
+Before using the script, make sure is is executable. From the directory containing the script, run:
 
 ```bash
-chmod +x mygrep.sh mygrepstdin.sh
+chmod +x mygrep.sh
 ```
 
 ## Overview
 
-This repository provides two simple, case-insensitive line-search tools implemented in Bash:
+This repository provides a simple, case-insensitive line-search tool implemented in Bash:
 
 - **mygrep.sh**: A straightforward utility to search for a pattern in a file, with optional line numbering (`-n`) and inverted matching (`-v`).
-- **mygrepstdin.sh**: Extends `mygrep.sh` by prompting the user for a filename when one is not passed on the command line.
 
-Both scripts rely on `awk` for fast text processing and adhere to POSIX shell conventions.
+The script relies on `awk` for fast text processing and adhere to POSIX shell conventions.
 
-## Common Options
+## Options
 
 All options can be combined in any order and apply equally to both scripts:
 
@@ -54,39 +53,9 @@ Searches the given `<filename>` for occurrences of `<pattern>` (case-insensitive
 ./mygrep.sh -v TODO TODOs.txt
 ```
 
-## mygrepstdin.sh
-
-**Synopsis:**
-```bash
-./mygrepstdin.sh [OPTIONS] <pattern> [filename]
-```
-
-**Description:**
-Works like `mygrep.sh`, but if you omit the `filename`, the script will prompt you to enter it interactively:
-
-```bash
-$ ./mygrepstdin.sh hello
-Enter filename: notes.txt
-```
-
-This is useful when you know the pattern but want to choose from multiple files on the fly.
-
-**Dependencies:**
-- `bash` (recommended, for the `read -p` prompt)
-- `awk`
-
-**Examples:**
-```bash
-# Prompt for filename
-./mygrepstdin.sh success
-
-# Provide filename inline
-./mygrepstdin.sh -n success report.log
-```
-
 ## Handling Errors
 
-Both scripts perform the following checks and exit codes:
+The script performs the following checks and exit codes:
 
 | Condition                                 | Exit Code |
 |-------------------------------------------|-----------|
