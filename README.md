@@ -71,5 +71,3 @@ Descriptive error messages are printed to `stderr`.
 
 **Created:** April 28, 2025
 
-**License:** MIT (see [LICENSE](LICENSE) for details)
-
